@@ -7,8 +7,7 @@
     "build": "tsc -p .",
     "start": "node dist/server.js",
     "test": "jest"
-  }
-,
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -23,6 +22,7 @@
   "devDependencies": {
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
+    "@types/morgan": "^1.9.10",
     "@types/node": "^24.0.15",
     "@types/supertest": "^6.0.3",
     "jest": "^30.0.4",
