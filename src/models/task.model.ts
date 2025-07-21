@@ -20,8 +20,7 @@ const taskSchema = new Schema({
     },
 },
     {
-        timestamps: true, // adds createdAt and updateAt
-        versionKey: false,
+        timestamps: true,
     }
 );
 
