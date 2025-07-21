@@ -14,8 +14,16 @@ import {
 export const createTaskHandler = async (req: Request, res: Response) => {
     const { error, value } = createTaskSchema.validate(req.body);
     if (error) {
-        return res.status(400).json({ success: false, error: error.message });
+        return res.status(400).json({
+            success: false,
+            error: {
+                code: 'VALIDATION_ERROR',
+                message: error.details[0].message,
+                details: error.details.map(d => d.path.join('.')),
+            },
+        });
     }
+
 
     const task = await createTask(value);
 
@@ -82,8 +90,16 @@ export const getTaskByIdHandler = async (req: Request, res: Response) => {
 export const updateTaskHandler = async (req: Request, res: Response) => {
     const { error, value } = updateTaskSchema.validate(req.body);
     if (error) {
-        return res.status(400).json({ success: false, error: error.message });
+        return res.status(400).json({
+            success: false,
+            error: {
+                code: 'VALIDATION_ERROR',
+                message: error.details[0].message,
+                details: error.details.map((d) => d.path.join('.')),
+            },
+        });
     }
+
 
     const task = await updateTask(req.params.id, value);
     if (!task) {
