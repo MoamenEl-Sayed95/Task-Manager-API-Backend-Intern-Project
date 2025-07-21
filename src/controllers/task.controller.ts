@@ -70,7 +70,13 @@ export const getTasksHandler = async (req: Request, res: Response) => {
 export const getTaskByIdHandler = async (req: Request, res: Response) => {
     const task = await getTaskById(req.params.id);
     if (!task) {
-        return res.status(404).json({ success: false, error: 'Task not found' });
+        return res.status(404).json({
+            success: false,
+            error: {
+                code: 'NOT_FOUND',
+                message: 'Task not found',
+            },
+        });
     }
 
     res.json({
@@ -121,10 +127,17 @@ export const updateTaskHandler = async (req: Request, res: Response) => {
 };
 
 export const deleteTaskHandler = async (req: Request, res: Response) => {
-    const task = await deleteTask(req.params.id);
-    if (!task) {
-        return res.status(404).json({ success: false, error: 'Task not found' });
-    }
+  const task = await deleteTask(req.params.id);
 
-    res.status(204).send();
+  if (!task) {
+    return res.status(404).json({
+      success: false,
+      error: {
+        code: 'NOT_FOUND',
+        message: 'Task not found',
+      },
+    });
+  }
+
+  res.status(204).send();
 };
