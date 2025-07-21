@@ -4,7 +4,7 @@ const app = express();
 
 
 app.get("/", (req, res) => {
-    res.send("Task Manager API is runing...");
+    res.send("Task Manager API is running...");
 });
 
 export default app;
