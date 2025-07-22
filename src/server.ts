@@ -11,7 +11,7 @@ const PORT = config.port;
 const MONGODB_URI = config.mongoUri;
 
 // Function to connect to MongoDB and start the server
-const startServer = async () => {
+const connectDB = async () => {
   try {
     // Connect to MongoDB
     await mongoose.connect(MONGODB_URI);
@@ -29,4 +29,4 @@ const startServer = async () => {
 };
 
 // Run the server
-startServer();
+connectDB();
