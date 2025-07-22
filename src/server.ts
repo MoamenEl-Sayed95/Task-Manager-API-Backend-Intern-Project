@@ -8,13 +8,13 @@ dotenv.config();
 
 // Get PORT and MongoDB URI from config
 const PORT = config.port;
-const MONGO_URI = config.mongoUri;
+const MONGODB_URI = config.mongoUri;
 
 // Function to connect to MongoDB and start the server
 const startServer = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect(MONGO_URI);
+    await mongoose.connect(MONGODB_URI);
     console.log(`✅ Connected to MongoDB`);
 
     // Start the Express server
