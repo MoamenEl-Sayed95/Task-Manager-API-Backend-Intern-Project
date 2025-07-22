@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import mongoose from 'mongoose';
 import {
     createTask,
     getTasks,
@@ -127,7 +128,20 @@ export const updateTaskHandler = async (req: Request, res: Response) => {
 };
 
 export const deleteTaskHandler = async (req: Request, res: Response) => {
-    const task = await deleteTask(req.params.id);
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({
+            success: false,
+            error: {
+                code: 'INVALID_ID',
+                message: 'Invalid task ID format',
+            },
+        });
+    }
+
+    const task = await deleteTask(id);
+
 
     if (!task) {
         return res.status(404).json({
@@ -139,5 +153,7 @@ export const deleteTaskHandler = async (req: Request, res: Response) => {
         });
     }
 
-    res.status(204).send();
+
+    res.status(204).json({ success: true });
+
 };
