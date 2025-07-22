@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import mongoose from 'mongoose';
+
 import {
     createTask,
     getTasks,
@@ -11,6 +12,7 @@ import {
     createTaskSchema,
     updateTaskSchema,
 } from '../schemas/task.schema';
+import { TaskModel } from '../models/task.model';
 
 export const createTaskHandler = async (req: Request, res: Response) => {
     const { error, value } = createTaskSchema.validate(req.body);
@@ -24,7 +26,17 @@ export const createTaskHandler = async (req: Request, res: Response) => {
             },
         });
     }
-
+    const existingTask = await TaskModel.findOne({ title: value.title });
+    if (existingTask) {
+        return res.status(400).json({
+            success: false,
+            error: {
+                code: 'DUPLICATE_TASK',
+                message: 'Task with this title already exists',
+                details: ['title'],
+            },
+        });
+    }
 
     const task = await createTask(value);
 
@@ -154,6 +166,6 @@ export const deleteTaskHandler = async (req: Request, res: Response) => {
     }
 
 
-    res.status(204).json({ success: true });
+    res.status(200).json({ success: true });
 
 };
