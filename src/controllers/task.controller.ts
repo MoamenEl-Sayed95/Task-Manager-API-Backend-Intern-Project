@@ -127,17 +127,17 @@ export const updateTaskHandler = async (req: Request, res: Response) => {
 };
 
 export const deleteTaskHandler = async (req: Request, res: Response) => {
-  const task = await deleteTask(req.params.id);
+    const task = await deleteTask(req.params.id);
 
-  if (!task) {
-    return res.status(404).json({
-      success: false,
-      error: {
-        code: 'NOT_FOUND',
-        message: 'Task not found',
-      },
-    });
-  }
+    if (!task) {
+        return res.status(404).json({
+            success: false,
+            error: {
+                code: 'NOT_FOUND',
+                message: 'Task not found',
+            },
+        });
+    }
 
-  res.status(204).send();
+    res.status(204).send();
 };
