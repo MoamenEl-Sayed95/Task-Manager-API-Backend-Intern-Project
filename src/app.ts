@@ -5,8 +5,10 @@ import taskRoutes from './routes/task.routes';
 import { notFound } from './middleware/notFound';
 import { errorHandler } from './middleware/errorHandler';
 
+// add dotenv configuration
 dotenv.config();
 
+// initialize Express app
 const app = express();
 
 // Middlewares
@@ -22,4 +24,5 @@ app.use(notFound);
 // Error Handler Middleware
 app.use(errorHandler);
 
+// export Express app instance
 export default app;
