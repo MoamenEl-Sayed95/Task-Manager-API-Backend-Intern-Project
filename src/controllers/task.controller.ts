@@ -1,5 +1,12 @@
+// Import necessary types from Express
+
 import { Request, Response } from 'express';
+
+// Import Mongoose for ObjectId validation
+
 import mongoose from 'mongoose';
+
+// Import service layer functions for task operations
 
 import {
     createTask,
@@ -8,13 +15,24 @@ import {
     updateTask,
     deleteTask,
 } from '../services/task.service';
+
+// Import Joi validation schemas
+
 import {
     createTaskSchema,
     updateTaskSchema,
 } from '../schemas/task.schema';
+
+// Import the Task model (used for checking duplicates)
+
 import { TaskModel } from '../models/task.model';
 
+// Handler for creating a new task
+
 export const createTaskHandler = async (req: Request, res: Response) => {
+
+    // Validate request body
+
     const { error, value } = createTaskSchema.validate(req.body);
     if (error) {
         return res.status(400).json({
@@ -26,6 +44,9 @@ export const createTaskHandler = async (req: Request, res: Response) => {
             },
         });
     }
+
+    // Check for duplicate task title
+
     const existingTask = await TaskModel.findOne({ title: value.title });
     if (existingTask) {
         return res.status(400).json({
@@ -38,7 +59,10 @@ export const createTaskHandler = async (req: Request, res: Response) => {
         });
     }
 
+    // Create the task
     const task = await createTask(value);
+
+    // Respond with the created task
 
     res.status(201).json({
         success: true,
@@ -54,14 +78,19 @@ export const createTaskHandler = async (req: Request, res: Response) => {
     });
 };
 
+// Handler for retrieving all tasks (supports pagination, filter, sort)
+
 export const getTasksHandler = async (req: Request, res: Response) => {
     const { page = '1', limit = '10', status, sort = '-createdAt' } = req.query;
 
     const filter: any = {};
     if (status) filter.status = status;
 
+    // Get tasks from the service with filters
+
     const result = await getTasks(filter, Number(page), Number(limit), String(sort));
 
+    // Format the tasks
 
     const formattedTasks = result.tasks.map(task => ({
         _id: task._id,
@@ -73,12 +102,15 @@ export const getTasksHandler = async (req: Request, res: Response) => {
         updatedAt: task.updatedAt,
     }));
 
+    // Respond with tasks and metadata
     res.json({
         success: true,
         meta: result.meta,
         data: formattedTasks,
     });
 };
+
+// Handler for retrieving a task by ID
 
 export const getTaskByIdHandler = async (req: Request, res: Response) => {
     const task = await getTaskById(req.params.id);
@@ -106,8 +138,13 @@ export const getTaskByIdHandler = async (req: Request, res: Response) => {
     });
 };
 
+// Handler for updating a task by ID
+
 export const updateTaskHandler = async (req: Request, res: Response) => {
+
+    // Validate request body
     const { error, value } = updateTaskSchema.validate(req.body);
+
     if (error) {
         return res.status(400).json({
             success: false,
@@ -119,12 +156,13 @@ export const updateTaskHandler = async (req: Request, res: Response) => {
         });
     }
 
-
+     // Update task
     const task = await updateTask(req.params.id, value);
     if (!task) {
         return res.status(404).json({ success: false, error: 'Task not found' });
     }
 
+    // Respond with updated task
     res.json({
         success: true,
         data: {
@@ -139,9 +177,12 @@ export const updateTaskHandler = async (req: Request, res: Response) => {
     });
 };
 
+// Handler for deleting a task by ID
+
 export const deleteTaskHandler = async (req: Request, res: Response) => {
     const { id } = req.params;
 
+    // Validate MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).json({
             success: false,
@@ -152,6 +193,7 @@ export const deleteTaskHandler = async (req: Request, res: Response) => {
         });
     }
 
+    // Delete the task
     const task = await deleteTask(id);
 
 
@@ -165,7 +207,7 @@ export const deleteTaskHandler = async (req: Request, res: Response) => {
         });
     }
 
-
+    // Respond with success
     res.status(200).json({ success: true });
 
 };
