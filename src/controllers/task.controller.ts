@@ -14,7 +14,7 @@ import {
 } from '../services/task.service';
 
 // Import Joi validation schemas
-import {createTaskSchema, updateTaskSchema,} from '../schemas/task.schema';
+import { createTaskSchema, updateTaskSchema, } from '../schemas/task.schema';
 
 // Import the Task model (used for checking duplicates)
 import { TaskModel } from '../models/task.model';
@@ -139,12 +139,18 @@ export const updateTaskHandler = async (req: Request, res: Response) => {
         });
     }
 
-     // Update task
+    // Update task
     const task = await updateTask(req.params.id, value);
     if (!task) {
-        return res.status(404).json({ success: false, error: 'Task not found' });
+        return res.status(404).json({
+            success: false,
+            error: {
+                code: 'NOT_FOUND',
+                message: 'Task not found with the given ID.',
+            },
+        });
     }
-
+    
     // Respond with updated task
     res.json({
         success: true,
