@@ -10,20 +10,24 @@ const taskSchema = new Schema({
         required: true,
         trim: true,
     },
+    // Optional task description (trimmed string)
     description: {
         type: String,
         trim: true,
     },
+    // Task status with predefined values and a default of "pending"
     status: {
         type: String,
         enum: ["pending", "in_progress", "completed"],
         default: "pending"
     },
+    // Optional due date for the task
     dueDate: {
         type: Date,
     },
 },
     {
+        // Automatically adds createdAt and updatedAt timestamps
         timestamps: true,
     }
 );
