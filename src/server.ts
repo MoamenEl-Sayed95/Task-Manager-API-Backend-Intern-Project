@@ -1,6 +1,13 @@
+// Import Mongoose to connect with MongoDB
 import mongoose from "mongoose";
+
+// Load environment variables from .env file into process.env
 import dotenv from "dotenv";
+
+// Import the Express application instance
 import app from "./app";
+
+// Import configuration settings (e.g., PORT, DB_URI)
 import { config } from "./config";
 
 // Load environment variables from .env file
