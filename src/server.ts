@@ -10,6 +10,7 @@ import app from "./app";
 // Import configuration settings (e.g., PORT, DB_URI)
 import { config } from "./config";
 
+// Import custom logger utility for structured logging
 import { logger } from './utils/logger';
 
 // Load environment variables from .env file
