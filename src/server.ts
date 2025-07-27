@@ -10,6 +10,8 @@ import app from "./app";
 // Import configuration settings (e.g., PORT, DB_URI)
 import { config } from "./config";
 
+import { logger } from './utils/logger';
+
 // Load environment variables from .env file
 dotenv.config();
 
@@ -22,15 +24,15 @@ const connectDB = async () => {
   try {
     // Connect to MongoDB
     await mongoose.connect(MONGODB_URI);
-    console.log(`✅ Connected to MongoDB`);
+    logger.info(`✅ Connected to MongoDB`);
 
     // Start the Express server
     app.listen(PORT, () => {
-      console.log(`🚀 Server is running at http://localhost:${PORT}`);
+      logger.info(`🚀 Server is running at http://localhost:${PORT}`);
     });
   } catch (error: any) {
     // Handle MongoDB connection error
-    console.error(`❌ MongoDB connection error:`, error.message);
+    logger.error(`❌ MongoDB connection error:`, error.message);
     process.exit(1); // Exit the process with failure
   }
 };
